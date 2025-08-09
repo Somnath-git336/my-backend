@@ -1,0 +1,19 @@
+{
+  "name": "my-backend",
+  "version": "1.0.0",
+  "description": "A simple Node.js backend hosted on Render",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.19.2"
+  },
+  "engines": {
+    "node": ">=18.x"
+  }
+}
