@@ -1,31 +1,20 @@
-const express = require("express");
-const app = express();
+const { Pool } = require('pg');
 
-const PORT = process.env.PORT || 3000;
-
-// Home route
-app.get("/", (req, res) => {
-  res.send("Hello from Render backend!");
+// Create a connection pool using DATABASE_URL from environment
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false // Needed for Render's hosted PostgreSQL
+  }
 });
 
-// About route
-app.get("/about", (req, res) => {
-  res.send("This is a beginner backend project hosted on Render.");
+// Example query
+pool.query('SELECT NOW()', (err, res) => {
+  if (err) {
+    console.error('Database connection error:', err);
+  } else {
+    console.log('Database connected, current time:', res.rows[0]);
+  }
 });
 
-// Time route
-app.get("/time", (req, res) => {
-  const now = new Date();
-  res.send(`Current server time: ${now.toLocaleString()}`);
-});
-
-// Random number route
-app.get("/random", (req, res) => {
-  const number = Math.floor(Math.random() * 100) + 1;
-  res.send(`Your random number is: ${number}`);
-});
-
-// Start server
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+module.exports = pool;

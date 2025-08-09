@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Messages App</title>
+</head>
+<body>
+    <h1>Messages App</h1>
+
+    <input type="text" id="messageInput" placeholder="Type your message">
+    <button onclick="addMessage()">Add Message</button>
+
+    <h2>All Messages:</h2>
+    <ul id="messagesList"></ul>
+
+    <script>
+        const backendUrl = "https://my-backend-agh5.onrender.com";
+
+        async function fetchMessages() {
+            const res = await fetch(`${backendUrl}/messages`);
+            const data = await res.json();
+            const list = document.getElementById("messagesList");
+            list.innerHTML = "";
+            data.forEach(msg => {
+                const li = document.createElement("li");
+                li.textContent = msg.text;
+                list.appendChild(li);
+            });
+        }
+
+        async function addMessage() {
+            const input = document.getElementById("messageInput");
+            const text = input.value.trim();
+            if (!text) return;
+            await fetch(`${backendUrl}/messages`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ text })
+            });
+            input.value = "";
+            fetchMessages();
+        }
+
+        // Load messages on page load
+        fetchMessages();
+    </script>
+</body>
+</html>
